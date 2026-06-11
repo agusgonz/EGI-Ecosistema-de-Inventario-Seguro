@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventario-web
+  labels:
+    app: inventario-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventario-web
+  template:
+    metadata:
+      labels:
+        app: inventario-web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        env:
+          - name: DB_MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credenciales
+                key: mongo-root-user
+          - name: DB_MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credenciales
+                key: mongo-root-password

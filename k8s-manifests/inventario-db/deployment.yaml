@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventario-db
+  labels:
+    app: inventario-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventario-db
+  template:
+    metadata:
+      labels:
+        app: inventario-db
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:4.4
+        ports:
+        - containerPort: 27017
+        env:
+        # Configuración de credenciales seguras
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credenciales
+              key: mongo-root-user
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-credenciales
+              key: mongo-root-password
